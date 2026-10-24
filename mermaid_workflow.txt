@@ -1,0 +1,18 @@
+flowchart TD
+    Start(["Patient Initiates Contact or Check-In"]) --> Engage["Conduct Conversational Patient Interview"]
+    Engage --> SearchDB[("Search Hospital Database for Existing Records")]
+    SearchDB --> CheckMatch{"Existing Patient Found?"}
+    CheckMatch -->|Yes: Existing Record| RetrieveRecord["Cross-Reference & Identify Gaps or Discrepancies"]
+    CheckMatch -->|No: New Patient| InitProfile["Generate New Patient Profile Instance"]
+    RetrieveRecord --> Synthesize["Synthesize Complete Patient Persona & Medical History"]
+    InitProfile --> Synthesize
+    Synthesize --> RiskCheck{"Critical Allergies or High-Risk Symptoms Detected?"}
+    RiskCheck -->|Yes| FlagClinician["Alert Clinical Staff & Request Immediate Verification"]
+    RiskCheck -->|No| StandardizeData["Format & Normalize Records to Hospital Standards"]
+    FlagClinician --> StandardizeData
+    StandardizeData --> ReviewGate{"Staff Approval Required?"}
+    ReviewGate -->|Yes| HumanReview["Clinical Administrator Confirms Data Sync"]
+    ReviewGate -->|No / Verified| CommitDB[("Save Standardized Persona to Hospital Database")]
+    HumanReview --> CommitDB
+    CommitDB --> NotifyPatient["Send Confirmation & Care Summary to Patient"]
+    NotifyPatient --> End(["Intake & Record Harmonization Complete"])

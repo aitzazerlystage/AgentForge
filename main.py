@@ -30,8 +30,11 @@ def run_sample_scenario():
         result = forge_agent(
             category=sample_category,
             problem_statement=sample_problem,
+            output_file="mermaid_workflow.txt",
         )
         print(result["formatted_display"])
+        if result.get("output_file"):
+            print(f"\n💾 Pure Mermaid code saved to: {result['output_file']}")
     except Exception as exc:
         print(f"❌ Error during AgentForge execution: {exc}")
         print("\nPlease ensure your GOOGLE_API_KEY is configured in your .env file.")
@@ -73,10 +76,12 @@ def run_interactive_mode():
             category=category,
             problem_statement=problem_statement,
             chain=chain,
+            output_file="mermaid_workflow.txt",
         )
         print("\n" + result["formatted_display"])
 
-        # Also demonstrate accessing the pure mermaid code directly
+        if result.get("output_file"):
+            print(f"\n💾 Pure Mermaid code saved to: {result['output_file']}")
         print("\n💡 Tip: You can access the pure Mermaid code directly using result['mermaid_code'].")
 
     except Exception as exc:

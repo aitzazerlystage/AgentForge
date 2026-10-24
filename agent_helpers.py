@@ -177,6 +177,22 @@ def format_agent_output_fn(output: Union[AgentWorkflowOutput, Dict[str, Any]]) -
     }
 
 
+def save_mermaid_to_file(mermaid_code: str, file_path: str = "mermaid_workflow.txt") -> str:
+    """
+    Saves pure Mermaid code to a text (.txt) file.
+    Ensures parent directories exist and uses UTF-8 encoding.
+    Returns the string path of the saved file.
+    """
+    from pathlib import Path
+
+    cleaned = clean_mermaid_code(mermaid_code)
+    target = Path(file_path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    with open(target, "w", encoding="utf-8") as f:
+        f.write(cleaned + "\n")
+    return str(target)
+
+
 # RunnableLambda for output formatting
 output_formatter_runnable = RunnableLambda(format_agent_output_fn).with_config(
     run_name="OutputFormatter"

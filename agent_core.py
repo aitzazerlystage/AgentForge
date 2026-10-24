@@ -15,6 +15,7 @@ from agent_helpers import (
     input_merger_runnable,
     output_formatter_runnable,
     create_input_payload,
+    save_mermaid_to_file,
 )
 
 # Load environment variables from .env file
@@ -91,19 +92,27 @@ def forge_agent(
     chain: Optional[Any] = None,
     model_name: Optional[str] = None,
     api_key: Optional[str] = None,
+    output_file: Optional[str] = "mermaid_workflow.txt",
 ) -> Dict[str, Any]:
     """
     Convenience function taking two inputs: category and problem_statement.
-    Invokes the AgentForge chain and returns the formatted dictionary containing:
+    Invokes the AgentForge chain, saves the Mermaid code to a .txt file if requested,
+    and returns the formatted dictionary containing:
       - 'agent_name': Name of the proposed AI Agent
       - 'description': Plain-language, professional description
       - 'workflow_summary': Plain-language stage overview
       - 'mermaid_code': Pure Mermaid flowchart code
       - 'formatted_display': Beautifully formatted printable string
+      - 'output_file': Path to the generated .txt file (if output_file was specified)
     """
     if chain is None:
         chain = create_agent_forge_chain(model_name=model_name, api_key=api_key)
 
     payload = create_input_payload(category=category, problem_statement=problem_statement)
     result = chain.invoke(payload)
+
+    if output_file:
+        saved_path = save_mermaid_to_file(result["mermaid_code"], output_file)
+        result["output_file"] = saved_path
+
     return result

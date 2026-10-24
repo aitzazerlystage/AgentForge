@@ -62,16 +62,18 @@ GOOGLE_API_KEY=your_gemini_api_key_here
 ```python
 from agent_core import forge_agent
 
-# Propose an agent with 2 inputs
+# Propose an agent with 2 inputs (automatically saves to mermaid_workflow.txt)
 result = forge_agent(
     category="Software",
-    problem_statement="Microservices experiencing cascading timeouts during database read-replica failover."
+    problem_statement="Microservices experiencing cascading timeouts during database read-replica failover.",
+    output_file="mermaid_workflow.txt"  # Optional, defaults to "mermaid_workflow.txt"
 )
 
 # Access individual components
 print("Agent Name:", result["agent_name"])
 print("Description:", result["description"])
 print("Pure Mermaid Code:\n", result["mermaid_code"])
+print("Saved to file:", result.get("output_file"))
 
 # Or print the full formatted view
 print(result["formatted_display"])
